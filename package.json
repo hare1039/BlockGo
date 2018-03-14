@@ -1,0 +1,15 @@
+{
+  "name": "block-go",
+  "version": "0.0.1",
+  "description": "BlockGo frontend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/hare1039/BlockGo.git"
+  },
+  "author": "hare1039 <hare1039@hare1039.nctu.me>",
+  "license": "MIT"
+}
