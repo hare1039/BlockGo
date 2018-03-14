@@ -52,9 +52,10 @@ board.addEventListener("mousemove", function(x: number, y: number, event: MouseE
             })
         }
     }
+    let previewItem = document.querySelector('input[name = "preview"]:checked') as HTMLInputElement;
     for (let i = 0; i < 4; i++) {
         for (let j = 0; j < 4; j++) {
-            if (shapeArr[Number(tool.value)].data[i][j] == 1) {
+            if (shapeArr[Number(previewItem.value)].data[i][j] == 1) {
                 board.addObject({
                     x: x + i,
                     y: y + j,
