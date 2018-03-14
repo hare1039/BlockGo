@@ -29,6 +29,7 @@ body {
 #board {
 	display: flex;
     flex: 10;
+	cursor: none;
 }
 
 #container2 {
@@ -36,3 +37,4 @@ body {
 	flex: 1;
 	flex-direction: column;
 }
+
