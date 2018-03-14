@@ -1,8 +1,28 @@
 
-enum dir { UP, LEFT, DOWN, RIGHT };
 class basicShape {
     data: number[][];
-    dir: number;
+    dir: number = 0;
+    rotate = () => {
+        let newArr: number[][] = [
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0]
+        ];
+        let len = 4;
+        for (let i = 0; i < len; i++) {
+            for (let j = 0; j < len; j++) {
+                newArr[i][j] = this.data[j][len - 1 - i];
+            }
+        }
+        this.data = newArr;
+        this.dir++;
+    }
+    rotateCounter = () => {
+        this.rotate();
+        this.rotate();
+        this.rotate();
+    }
     paint = (board: any, x: number, y: number, what: Object) => {
         for (let i = 0; i < 4; i++) {
             for (let j = 0; j < 4; j++) {
@@ -25,7 +45,6 @@ class type1 extends basicShape {
         [0, 0, 0, 0],
         [0, 0, 0, 0]
     ];
-    dir = 0;
 }
 class type2 extends type1 { }
 
@@ -36,7 +55,6 @@ class type3 extends basicShape {
         [1, 0, 0, 0],
         [0, 0, 0, 0]
     ];
-    dir = 0;
 }
 
 class type4 extends basicShape {
@@ -46,7 +64,6 @@ class type4 extends basicShape {
         [0, 0, 0, 0],
         [0, 0, 0, 0]
     ];
-    dir = 0;
 }
 class type5 extends basicShape {
     data = [
@@ -55,7 +72,6 @@ class type5 extends basicShape {
         [0, 0, 0, 0],
         [0, 0, 0, 0]
     ];
-    dir = 0;
 }
 class type6 extends basicShape {
     data = [
@@ -64,7 +80,6 @@ class type6 extends basicShape {
         [0, 0, 0, 0],
         [0, 0, 0, 0]
     ];
-    dir = 0;
 }
 class type7 extends basicShape {
     data = [
@@ -73,7 +88,6 @@ class type7 extends basicShape {
         [0, 0, 0, 0],
         [0, 0, 0, 0]
     ];
-    dir = 0;
 }
 class type8 extends basicShape {
     data = [
@@ -82,7 +96,6 @@ class type8 extends basicShape {
         [0, 0, 0, 0],
         [0, 0, 0, 0]
     ];
-    dir = 0;
 }
 class type9 extends basicShape {
     data = [
@@ -91,7 +104,6 @@ class type9 extends basicShape {
         [0, 0, 0, 0],
         [0, 0, 0, 0]
     ];
-    dir = 0;
 }
 
 var shapeArr: basicShape[] = [

@@ -7,8 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/hare1039/BlockGo.git"
+    "type": "git",
+    "url": "https://github.com/hare1039/BlockGo.git"
   },
   "author": "hare1039 <hare1039@hare1039.nctu.me>",
   "license": "MIT"

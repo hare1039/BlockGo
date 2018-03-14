@@ -1,4 +1,5 @@
 declare var WGo: any;
+declare var _: any;
 
 import { plane } from "./stones";
 import { shapeArr } from "./shapes";
@@ -11,7 +12,7 @@ let board: any = new WGo.Board(document.getElementById("board"), {
 
 
 let tool = document.getElementById("tool") as HTMLInputElement;
-board.addEventListener("click", function(x: number, y: number) {
+function onClick(x: number, y: number) {
     let previewItem = document.querySelector('input[name = "preview"]:checked') as HTMLInputElement;
     if (tool.value == "black") {
         shapeArr[Number(previewItem.value)].paint(board, x, y, { c: WGo.B });
@@ -20,16 +21,22 @@ board.addEventListener("click", function(x: number, y: number) {
     } else if (tool.value == "remove") {
         board.removeObjectsAt(x, y);
     } else {
-        board.addObject({
-            x: x,
-            y: y,
-            type: tool.value
-        });
+        shapeArr[Number(previewItem.value)].rotate();
     }
-});
+}
 
+function onWheel(x: number, y: number, event: WheelEvent) {
+    let previewItem = document.querySelector('input[name = "preview"]:checked') as HTMLInputElement;
+    if (event.deltaY > 0) {
+        shapeArr[Number(previewItem.value)].rotate();
+    } else {
+        shapeArr[Number(previewItem.value)].rotateCounter();
+    }
+    onMousemove(x, y, event);
+}
 
-board.addEventListener("mousemove", function(x: number, y: number, event: MouseEvent) {
+function onMousemove(x: number, y: number, event: MouseEvent) {
+    let previewItem = document.querySelector('input[name = "preview"]:checked') as HTMLInputElement;
     for (let i = 0; i < 13; i++) {
         for (let j = 0; j < 13; j++) {
             board.removeObject({
@@ -39,7 +46,9 @@ board.addEventListener("mousemove", function(x: number, y: number, event: MouseE
             })
         }
     }
-    let previewItem = document.querySelector('input[name = "preview"]:checked') as HTMLInputElement;
     shapeArr[Number(previewItem.value)].paint(board, x, y, { type: plane });
-});
+}
 
+board.addEventListener("mousemove", onMousemove);
+board.addEventListener("click", onClick);
+board.addEventListener("wheel", _.debounce(onWheel, 400));
