@@ -1,11 +1,14 @@
 declare var WGo: any;
 
 import { plane } from "./stones";
+import { shapeArr } from "./shapes";
+
 
 let board: any = new WGo.Board(document.getElementById("board"), {
     width: 600,
     size: 13
 });
+
 
 let tool = document.getElementById("tool") as HTMLInputElement;
 board.addEventListener("click", function(x: number, y: number) {
@@ -36,17 +39,29 @@ board.addEventListener("click", function(x: number, y: number) {
             type: tool.value
         });
     }
-    console.log(tool)
 });
 
 
-var currentMouse = {};
 board.addEventListener("mousemove", function(x: number, y: number, event: MouseEvent) {
-    board.addObject({
-        x: x,
-        y: y,
-        type: plane
-    });
-    currentMouse = { x, y };
+    for (let i = 0; i < 13; i++) {
+        for (let j = 0; j < 13; j++) {
+            board.removeObject({
+                x: i,
+                y: j,
+                type: plane
+            })
+        }
+    }
+    for (let i = 0; i < 4; i++) {
+        for (let j = 0; j < 4; j++) {
+            if (shapeArr[Number(tool.value)].data[i][j] == 1) {
+                board.addObject({
+                    x: x + i,
+                    y: y + j,
+                    type: plane
+                });
+            }
+        }
+    }
 });
 
