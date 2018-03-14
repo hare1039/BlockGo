@@ -12,26 +12,13 @@ let board: any = new WGo.Board(document.getElementById("board"), {
 
 let tool = document.getElementById("tool") as HTMLInputElement;
 board.addEventListener("click", function(x: number, y: number) {
+    let previewItem = document.querySelector('input[name = "preview"]:checked') as HTMLInputElement;
     if (tool.value == "black") {
-        board.addObject({
-            x: x,
-            y: y,
-            c: WGo.B
-        });
+        shapeArr[Number(previewItem.value)].paint(board, x, y, { c: WGo.B });
     } else if (tool.value == "white") {
-        board.addObject({
-            x: x,
-            y: y,
-            c: WGo.W
-        });
+        shapeArr[Number(previewItem.value)].paint(board, x, y, { c: WGo.W });
     } else if (tool.value == "remove") {
         board.removeObjectsAt(x, y);
-    } else if (tool.value == "plane") {
-        board.addObject({
-            x: x,
-            y: y,
-            type: plane
-        });
     } else {
         board.addObject({
             x: x,
@@ -53,16 +40,6 @@ board.addEventListener("mousemove", function(x: number, y: number, event: MouseE
         }
     }
     let previewItem = document.querySelector('input[name = "preview"]:checked') as HTMLInputElement;
-    for (let i = 0; i < 4; i++) {
-        for (let j = 0; j < 4; j++) {
-            if (shapeArr[Number(previewItem.value)].data[i][j] == 1) {
-                board.addObject({
-                    x: x + i,
-                    y: y + j,
-                    type: plane
-                });
-            }
-        }
-    }
+    shapeArr[Number(previewItem.value)].paint(board, x, y, { type: plane });
 });
 

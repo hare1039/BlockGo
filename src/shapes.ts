@@ -1,11 +1,24 @@
 
 enum dir { UP, LEFT, DOWN, RIGHT };
-interface basicShape {
+class basicShape {
     data: number[][];
     dir: number;
+    paint = (board: any, x: number, y: number, what: Object) => {
+        for (let i = 0; i < 4; i++) {
+            for (let j = 0; j < 4; j++) {
+                let obj = (<any>Object).assign({
+                    x: x + i,
+                    y: y + j,
+                }, what);
+                if (this.data[i][j] == 1) {
+                    board.addObject(obj);
+                }
+            }
+        }
+    };
 }
 
-class type1 implements basicShape {
+class type1 extends basicShape {
     data = [
         [1, 0, 0, 0],
         [0, 0, 0, 0],
@@ -16,7 +29,7 @@ class type1 implements basicShape {
 }
 class type2 extends type1 { }
 
-class type3 implements basicShape {
+class type3 extends basicShape {
     data = [
         [1, 0, 0, 0],
         [1, 1, 0, 0],
@@ -26,7 +39,7 @@ class type3 implements basicShape {
     dir = 0;
 }
 
-class type4 implements basicShape {
+class type4 extends basicShape {
     data = [
         [1, 1, 0, 0],
         [0, 1, 1, 0],
@@ -35,7 +48,7 @@ class type4 implements basicShape {
     ];
     dir = 0;
 }
-class type5 implements basicShape {
+class type5 extends basicShape {
     data = [
         [0, 1, 1, 0],
         [1, 1, 0, 0],
@@ -44,7 +57,7 @@ class type5 implements basicShape {
     ];
     dir = 0;
 }
-class type6 implements basicShape {
+class type6 extends basicShape {
     data = [
         [1, 0, 0, 0],
         [1, 1, 1, 0],
@@ -53,7 +66,7 @@ class type6 implements basicShape {
     ];
     dir = 0;
 }
-class type7 implements basicShape {
+class type7 extends basicShape {
     data = [
         [0, 0, 1, 0],
         [1, 1, 1, 0],
@@ -62,7 +75,7 @@ class type7 implements basicShape {
     ];
     dir = 0;
 }
-class type8 implements basicShape {
+class type8 extends basicShape {
     data = [
         [1, 1, 1, 1],
         [0, 0, 0, 0],
@@ -71,7 +84,7 @@ class type8 implements basicShape {
     ];
     dir = 0;
 }
-class type9 implements basicShape {
+class type9 extends basicShape {
     data = [
         [1, 1, 0, 0],
         [1, 1, 0, 0],
