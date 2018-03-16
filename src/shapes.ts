@@ -120,4 +120,4 @@ var shapeArr: basicShape[] = [
 ];
 
 
-export { dir, basicShape, shapeArr };
+export { basicShape, shapeArr };

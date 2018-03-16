@@ -3,19 +3,26 @@ declare var _: any;
 
 import { plane } from "./stones";
 import { shapeArr } from "./shapes";
-
+import { backend } from "./websocket";
 
 let board: any = new WGo.Board(document.getElementById("board"), {
     width: 600,
     size: 13
 });
 
-
+var back = new backend("wss://play.hare1039.nctu.me");
 let tool = document.getElementById("tool") as HTMLInputElement;
 function onClick(x: number, y: number) {
     let previewItem = document.querySelector('input[name = "preview"]:checked') as HTMLInputElement;
     if (tool.value == "black") {
         shapeArr[Number(previewItem.value)].paint(board, x, y, { c: WGo.B });
+        back.send(JSON.stringify({
+            cmd: "transfer",
+            x: x,
+            y: y,
+            stone: Number(previewItem.value),
+            rotate: shapeArr[Number(previewItem.value)].dir
+        }));
     } else if (tool.value == "white") {
         shapeArr[Number(previewItem.value)].paint(board, x, y, { c: WGo.W });
     } else if (tool.value == "remove") {
@@ -52,3 +59,4 @@ function onMousemove(x: number, y: number, event: MouseEvent) {
 board.addEventListener("mousemove", onMousemove);
 board.addEventListener("click", onClick);
 board.addEventListener("wheel", _.debounce(onWheel, 400));
+
