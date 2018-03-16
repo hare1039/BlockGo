@@ -106,7 +106,19 @@ class type9 extends basicShape {
     ];
 }
 
-var shapeArr: basicShape[] = [
+var shapeArrP1: basicShape[] = [
+    new type1, // this is padding
+    new type1,
+    new type2,
+    new type3,
+    new type4,
+    new type5,
+    new type6,
+    new type7,
+    new type8,
+    new type9
+];
+var shapeArrP2: basicShape[] = [
     new type1, // this is padding
     new type1,
     new type2,
@@ -120,4 +132,4 @@ var shapeArr: basicShape[] = [
 ];
 
 
-export { basicShape, shapeArr };
+export { basicShape, shapeArrP1, shapeArrP2 };
