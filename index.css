@@ -1,0 +1,40 @@
+html, body {
+	display: flex;
+	width: 100%;
+	height: 100%;
+	flex-direction: row;
+}
+
+#left {
+	display: flex;
+	flex: 1;
+	background-color: blue;
+}
+
+#mid {
+	display: flex;
+	flex: 2;
+	justify-content: center;
+	align-items: center;
+
+	background-color: yellow;
+}
+
+#right {
+	display: flex;
+	flex: 1;
+	Background-color: red;
+}
+
+.container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex: 1;
+}
+
+.selfcenter {
+	display: flex;
+	align-self: center;
+	flex: 1;
+}

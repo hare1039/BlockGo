@@ -1,0 +1,42 @@
+
+<!DOCTYPE HTML>
+<html>
+  <head>
+	<meta charset="utf-8">
+	<title>WGo</title>
+	<script type="text/javascript" src="wgo/wgo.min.js"></script>
+	<script type="text/javascript" src="wgo/wgo.player.min.js"></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+	<script data-main="./app.js" type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.3.5/require.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="wgo/wgo.player.css" />
+	<link rel="stylesheet" type="text/css" href="./play.css" />
+  </head>
+  <body>
+	<div id="container1">
+	  <select id="tool" style="display: block; margin-bottom: 10px;">
+		<option value="black" selected>Black stone</option>
+		<option value="white">White stone</option>
+		<option value="SQ">Square</option>
+		<option value="TR">Triangle</option>
+		<option value="CR">Circle</option>
+		<option value="remove">Remove</option>
+		<option value="plane">Plane</option>
+      </select>
+	  <input type="radio" name="preview" value="1" id="preview_type1" checked/><label class="choice" for="preview_type1">type 1</label><br />
+	  <input type="radio" name="preview" value="2" id="preview_type2"/><label class="choice" for="preview_type2">type 2</label><br />
+	  <input type="radio" name="preview" value="3" id="preview_type3"/><label class="choice" for="preview_type3">type 3</label><br />
+	  <input type="radio" name="preview" value="4" id="preview_type4"/><label class="choice" for="preview_type4">type 4</label><br />
+	  <input type="radio" name="preview" value="5" id="preview_type5"/><label class="choice" for="preview_type5">type 5</label><br />
+	  <input type="radio" name="preview" value="6" id="preview_type6"/><label class="choice" for="preview_type6">type 6</label><br />
+	  <input type="radio" name="preview" value="7" id="preview_type7"/><label class="choice" for="preview_type7">type 7</label><br />
+	  <input type="radio" name="preview" value="8" id="preview_type8"/><label class="choice" for="preview_type8">type 8</label><br />
+	  <input type="radio" name="preview" value="9" id="preview_type9"/><label class="choice" for="preview_type9">type 9</label><br />
+	</div>
+    <div id="board">
+      <!-- board will go here -->
+    </div>
+	<div id="container2">
+	  <!-- this is padding-->
+	</div>
+  </body>
+</html>
