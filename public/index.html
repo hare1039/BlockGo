@@ -10,13 +10,25 @@
   </head>
   <body>
 	<div id="left" class="container">
-	</div>
-	<div id="mid" class="container">
-	  <select class="selfcenter">
-		<option>c</option>
+	  <select class="selfcenter" id="leftSelect" name="leftSelect">
+		<option value="human" selected>human</option>
+		<option value="random">computer:random</option>
+		<option value="strategy">computer:strategy</option>
+		<option value="MCTS">computer:MCTS</option>
 	  </select>
 	</div>
+	<div id="mid" class="container">
+	  <button class="selfcenter" type="button" onclick="onClick();">
+		START!!
+	  </button>
+	</div>
 	<div id="right" class="container">
+	  <select class="selfcenter" id="rightSelect" name="rightSelect">
+		<option value="human">human</option>
+		<option value="random">computer:random</option>
+		<option value="strategy">computer:strategy</option>
+		<option value="MCTS" selected>computer:MCTS</option>
+	  </select>
 	</div>
 	<script src="./index.js"></script>
   </body>
