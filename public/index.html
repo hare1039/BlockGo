@@ -1,38 +1,35 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
-  <head>
-	<meta charset="utf-8">
-	<title>WGo Protal</title>
-	<script src="https://code.jquery.com/jquery-3.3.1.min.js"
-			integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-			crossorigin="anonymous"></script>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="./index.css" />
-  </head>
-  <body>
-	<div id="left" class="container">
-	  <select class="selfcenter" id="leftSelect" name="leftSelect">
-		<option value="human" selected>human</option>
-		<option value="random">computer:random</option>
-		<option value="strategy">computer:strategy</option>
-		<option value="MCTS">computer:MCTS</option>
-	  </select>
-	</div>
-	<div id="mid" class="container">
-	  <div id="midbackground"></div>
-	  <button class="selfcenter btn-info btn-lg" type="button" onclick="onClick();" id="start">
-		START!!
-	  </button>
-	</div>
-	<div id="right" class="container">
-	  <select class="selfcenter" id="rightSelect" name="rightSelect">
-		<option value="human">human</option>
-		<option value="random">computer:random</option>
-		<option value="strategy">computer:strategy</option>
-		<option value="MCTS" selected>computer:MCTS</option>
-	  </select>
-	</div>
-	<script src="./index.js"></script>
-  </body>
+	<head>
+		<meta charset="utf-8">
+		<title>shougi</title>
+		<link rel="stylesheet" href="./master.css">
+		<script type="text/javascript" src="./index.js"></script>
+	</head>
+	<body>
+		<img class="bg" src="https://hare1039.nctu.me/imgs/blockgo-asset/bg.jpg" alt="bg">
+		<div class="chars">
+			<div class="char">
+				<span class="player">PLAYER 1</span>
+				<div class="head" id="loli"></div>
+				<select class="sel" id="leftSelect" name="leftSelect">
+			        <option value="human" selected>human</option>
+			        <option value="random">computer:random</option>
+			        <option value="strategy">computer:strategy</option>
+			        <option value="MCTS">computer:MCTS</option>
+		        </select>
+			</div>
+			<div class="char">
+				<span class="player">PLAYER 2</span>
+				<div class="head" id="old"></div>
+				<select class="sel" id="rightSelect" name="rightSelect">
+			        <option value="human">human</option>
+			        <option value="random">computer:random</option>
+			        <option value="strategy">computer:strategy</option>
+			        <option value="MCTS" selected>computer:MCTS</option>
+		        </select>
+			</div>
+		</div>
+		<button id="start" type="button" name="button" onclick="onClick();">START!!!</button>
+	</body>
 </html>
