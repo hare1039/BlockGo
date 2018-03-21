@@ -8,7 +8,10 @@ html, body {
 #left {
 	display: flex;
 	flex: 1;
-	background-color: blue;
+	background-image: url("https://hare1039.nctu.me/imgs/blockgo-asset/ai.jpg");
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
 }
 
 #mid {
@@ -17,13 +20,19 @@ html, body {
 	justify-content: center;
 	align-items: center;
 
-	background-color: yellow;
+	background-image: url("https://hare1039.nctu.me/imgs/blockgo-asset/bg.jpg");
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
 }
 
 #right {
 	display: flex;
 	flex: 1;
-	Background-color: red;
+	background-image: url("https://hare1039.nctu.me/imgs/blockgo-asset/tubaki.jpg");
+    background-repeat: no-repeat;
+	background-position: left center;
+	background-size: cover;
 }
 
 .container {

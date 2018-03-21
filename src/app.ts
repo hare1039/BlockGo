@@ -1,17 +1,14 @@
 declare var WGo: any;
 declare var _: any;
 
+
 import { plane } from "./stones";
 import { shapeArrP1, shapeArrP2 } from "./shapes";
 import { backend } from "./websocket";
 
-let board: any = new WGo.Board(document.getElementById("board"), {
-    width: 600,
-    size: 13
-});
-
-var back = new backend("wss://play.hare1039.nctu.me");
 let tool = document.getElementById("tool") as HTMLInputElement;
+let board: any;
+let back: any;
 function onClick(x: number, y: number) {
     let previewItem = document.querySelector('input[name = "preview"]:checked') as HTMLInputElement;
     if (tool.value == "black") {
@@ -56,7 +53,17 @@ function onMousemove(x: number, y: number, event: MouseEvent) {
     shapeArrP1[Number(previewItem.value)].paint(board, x, y, { type: plane });
 }
 
-board.addEventListener("mousemove", onMousemove);
-board.addEventListener("click", onClick);
-board.addEventListener("wheel", _.debounce(onWheel, 400));
 
+function main() {
+    board = new WGo.Board(document.getElementById("board"), {
+        width: 600,
+        size: 13
+    });
+    back = new backend("wss://play.hare1039.nctu.me");
+    board.addEventListener("mousemove", onMousemove);
+    board.addEventListener("click", onClick);
+    board.addEventListener("wheel", _.debounce(onWheel, 400));
+}
+
+
+main();

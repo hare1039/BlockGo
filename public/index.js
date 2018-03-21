@@ -6,10 +6,10 @@ function onClick() {
 		alert("Sorry, only one humen can play this game");
 		return;
 	}
-	localStorage.setItem("player", {
+	localStorage.setItem("player", JSON.stringify({
 		right: r.value,
 		left: l.value
-	});
+	}));
 	
 	window.location.href = "play.html";
 }

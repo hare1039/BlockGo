@@ -16,6 +16,12 @@ class backend {
 
 
     onOpen(evt: Event) {
+        let option: any = JSON.parse(localStorage.getItem("player"));
+        this.send(JSON.stringify({
+            cmd: "start",
+            right: option.right,
+            left: option.left
+        }));
         console.log(evt);
     }
 
@@ -24,7 +30,26 @@ class backend {
     }
 
     onMessage(evt: MessageEvent) {
-        console.log(evt);
+        let dat = JSON.parse(evt.data);
+        switch (dat.cmd) {
+            case "start":
+                break;
+
+            case "transfer":
+                break;
+
+            case "end":
+                break;
+
+            case "status":
+                if (dat.status != "ok") {
+                    console.log(dat);
+                    return;
+                }
+
+
+                break;
+        }
     }
 
     onError(evt: ErrorEvent) {

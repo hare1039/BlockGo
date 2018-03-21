@@ -30,7 +30,7 @@ class basicShape {
                     x: x + i,
                     y: y + j,
                 }, what);
-                if (this.data[i][j] == 1) {
+                if (this.data[j][i] == 1) {
                     board.addObject(obj);
                 }
             }
