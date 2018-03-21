@@ -53,7 +53,8 @@ class backend {
     }
 
     onError(evt: ErrorEvent) {
-        console.log(evt);
+        alert("error happened (see console log)");
+        console.error(evt);
     }
 
     send(message: string) {

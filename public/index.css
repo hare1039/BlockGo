@@ -19,12 +19,22 @@ html, body {
 	flex: 2;
 	justify-content: center;
 	align-items: center;
+}
 
+#midbackground {
+    position: absolute;
+    left: 0;
+    top: 0;
+	height: 100%;
+	width: 100%;
+    z-index: -1;
 	background-image: url("https://hare1039.nctu.me/imgs/blockgo-asset/bg.jpg");
 	background-position: center;
 	background-repeat: no-repeat;
-	background-size: cover;
+	background-size: contain;
+	filter: blur(2px);	
 }
+
 
 #right {
 	display: flex;
@@ -39,6 +49,7 @@ html, body {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	text-align: center;
 	flex: 1;
 }
 
@@ -46,4 +57,12 @@ html, body {
 	display: flex;
 	align-self: center;
 	flex: 1;
+}
+
+#start {
+	text-align: center;
+	display: inline-block;
+	filter: none;
+	z-index: 10;
+	position: relative;
 }
