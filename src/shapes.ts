@@ -9,10 +9,11 @@ class basicShape {
             [0, 0, 0, 0],
             [0, 0, 0, 0]
         ];
+
         let len = 4;
         for (let i = 0; i < len; i++) {
             for (let j = 0; j < len; j++) {
-                newArr[i][j] = this.data[j][len - 1 - i];
+                newArr[i][j] = this.data[len - 1 - j][i];
             }
         }
         this.data = newArr;
@@ -24,8 +25,59 @@ class basicShape {
         this.rotate();
     }
     paint = (board: any, x: number, y: number, what: Object) => {
-        for (let i = 0; i < 4; i++) {
-            for (let j = 0; j < 4; j++) {
+        let shift_mapping = (<any>Object).assign({}, this.data);
+        const len = 4;
+        // shifting up
+        for (; ;) {
+            let is_empty = true;
+            for (let i = 0; i < len; i++) {
+                if (shift_mapping[0][i] != 0) {
+                    is_empty = false;
+                    break;
+                }
+            }
+
+            if (is_empty == false) {
+                break;
+            } else {
+                // shift up 1 level
+                for (let i = 0; i < len; i++) {
+                    shift_mapping[0][i] = shift_mapping[1][i];
+                    shift_mapping[1][i] = shift_mapping[2][i];
+                    shift_mapping[2][i] = shift_mapping[3][i];
+                    shift_mapping[3][i] = 0;
+                }
+            }
+        }
+
+
+        // shifting left
+        for (; ;) {
+            let is_empty = true;
+            for (let i = 0; i < len; i++) {
+                if (shift_mapping[i][0] != 0) {
+                    is_empty = false;
+                    break;
+                }
+            }
+
+            if (is_empty == false) {
+                break;
+            } else {
+                // shift left 1 level
+                for (let i = 0; i < len; i++) {
+                    shift_mapping[i][0] = shift_mapping[i][1];
+                    shift_mapping[i][1] = shift_mapping[i][2];
+                    shift_mapping[i][2] = shift_mapping[i][3];
+                    shift_mapping[i][3] = 0;
+                }
+            }
+        }
+
+
+        // render
+        for (let i = 0; i < len; i++) {
+            for (let j = 0; j < len; j++) {
                 let obj = (<any>Object).assign({
                     x: x + i,
                     y: y + j,

@@ -30,6 +30,7 @@ class backend {
     }
 
     onMessage(evt: MessageEvent) {
+        console.log(evt);
         let dat = JSON.parse(evt.data);
         switch (dat.cmd) {
             case "start":
