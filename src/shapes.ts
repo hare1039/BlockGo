@@ -17,6 +17,7 @@ class basicShape {
             }
         }
         this.data = newArr;
+        this.shift_up_left();
         this.dir++;
     }
     rotateCounter = () => {
@@ -24,7 +25,8 @@ class basicShape {
         this.rotate();
         this.rotate();
     }
-    paint = (board: any, x: number, y: number, what: Object) => {
+
+    shift_up_left = () => {
         let shift_mapping = (<any>Object).assign({}, this.data);
         const len = 4;
         // shifting up
@@ -73,8 +75,10 @@ class basicShape {
                 }
             }
         }
+    }
 
-
+    paint = (board: any, x: number, y: number, what: Object) => {
+        let len = 4;
         // render
         for (let i = 0; i < len; i++) {
             for (let j = 0; j < len; j++) {
