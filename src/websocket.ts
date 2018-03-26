@@ -1,6 +1,15 @@
 
-class backend {
+interface render_info {
+    x: number;
+    y: number;
+    who: number;
+    stoneid: number;
+    rotate: number;
+}
 
+
+class backend {
+    board_ref: any;
     websocket: WebSocket;
     constructor(wss: string) {
         this.websocket = new WebSocket(wss);
@@ -30,13 +39,24 @@ class backend {
     }
 
     onMessage(evt: MessageEvent) {
-        console.log(evt);
         let dat = JSON.parse(evt.data);
+        console.log(dat);
         switch (dat.cmd) {
             case "start":
                 break;
 
             case "transfer":
+                let event = new CustomEvent("render", {
+                    detail: {
+                        x: dat.x,
+                        y: dat.y,
+                        who: 2,
+                        stoneid: dat.stone,
+                        rotate: dat.rotate
+                    }
+                });
+
+                document.getElementById("board").dispatchEvent(event);
                 break;
 
             case "end":
@@ -47,8 +67,6 @@ class backend {
                     console.log(dat);
                     return;
                 }
-
-
                 break;
         }
     }
@@ -63,4 +81,4 @@ class backend {
     }
 }
 
-export { backend };
+export { backend, render_info };

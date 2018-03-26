@@ -4,7 +4,7 @@ declare var _: any;
 
 import { plane } from "./stones";
 import { shapeArrP1, shapeArrP2 } from "./shapes";
-import { backend } from "./websocket";
+import { backend, render_info } from "./websocket";
 
 let tool = document.getElementById("tool") as HTMLInputElement;
 let board: any;
@@ -53,6 +53,13 @@ function onMousemove(x: number, y: number, event: MouseEvent) {
     shapeArrP1[Number(previewItem.value)].paint(board, x, y, { type: plane });
 }
 
+function onRender(place: CustomEvent) {
+    let stone = place.detail as render_info;
+    console.log("stone", stone);
+    for (let i = 0; i < stone.rotate; i++)
+        shapeArrP2[stone.stoneid].rotate();
+    shapeArrP2[stone.stoneid].paint(board, stone.x, stone.y, { c: WGo.W });
+}
 
 function main() {
     board = new WGo.Board(document.getElementById("board"), {
@@ -63,6 +70,7 @@ function main() {
     board.addEventListener("mousemove", onMousemove);
     board.addEventListener("click", onClick);
     board.addEventListener("wheel", _.debounce(onWheel, 400));
+    document.getElementById("board").addEventListener("render", onRender);
 }
 
 
