@@ -9,38 +9,59 @@ import { backend, render_info } from "./websocket";
 let tool = document.getElementById("tool") as HTMLInputElement;
 let board: any;
 let back: any;
-function onClick(x: number, y: number) {
-    let previewItem = document.querySelector('input[name = "preview"]:checked') as HTMLInputElement;
-    if (tool.value == "black") {
-        shapeArrP1[Number(previewItem.value)].paint(board, x, y, { c: WGo.B });
-        back.send(JSON.stringify({
-            cmd: "transfer",
-            x: x,
-            y: y,
-            stone: Number(previewItem.value),
-            rotate: shapeArrP1[Number(previewItem.value)].dir
-        }));
-    } else if (tool.value == "white") {
-        shapeArrP1[Number(previewItem.value)].paint(board, x, y, { c: WGo.W });
-    } else if (tool.value == "remove") {
-        board.removeObjectsAt(x, y);
+let prevState: any;
+
+
+let player: number;
+function filp_player() {
+    player = (player == 1) ? 2 : 1;
+}
+
+class playerInfo {
+    shape: typeof shapeArrP1[0];
+    color: typeof WGo.B;
+    dom: HTMLInputElement;
+}
+function currentPlayerInfo() {
+    let previewItem = document.querySelector('input[name = "preview_' + player + '"]:checked') as HTMLInputElement;
+    let info = new playerInfo;
+    if (player == 1) {
+        info.shape = shapeArrP1[Number(previewItem.value)];
+        info.color = WGo.B;
     } else {
-        shapeArrP1[Number(previewItem.value)].rotate();
+        info.shape = shapeArrP2[Number(previewItem.value)];
+        info.color = WGo.W;
     }
+    info.dom = previewItem;
+    return info;
+}
+
+function onClick(x: number, y: number) {
+    let info = currentPlayerInfo();
+    prevState = board.getState();
+    info.shape.paint(board, x, y, { c: info.color });
+    filp_player();
+    back.send(JSON.stringify({
+        cmd: "transfer",
+        x: x,
+        y: y,
+        stone: Number(info.dom.value),
+        rotate: info.shape.dir
+    }));
 }
 
 function onWheel(x: number, y: number, event: WheelEvent) {
-    let previewItem = document.querySelector('input[name = "preview"]:checked') as HTMLInputElement;
+    let previewItem = document.querySelector('input[name = "preview_' + player + '"]:checked') as HTMLInputElement;
+    let info = currentPlayerInfo();
     if (event.deltaY > 0) {
-        shapeArrP1[Number(previewItem.value)].rotate();
+        info.shape.rotate();
     } else {
-        shapeArrP1[Number(previewItem.value)].rotateCounter();
+        info.shape.rotateCounter();
     }
     onMousemove(x, y, event);
 }
 
 function onMousemove(x: number, y: number, event: MouseEvent) {
-    let previewItem = document.querySelector('input[name = "preview"]:checked') as HTMLInputElement;
     for (let i = 0; i < 13; i++) {
         for (let j = 0; j < 13; j++) {
             board.removeObject({
@@ -50,7 +71,8 @@ function onMousemove(x: number, y: number, event: MouseEvent) {
             })
         }
     }
-    shapeArrP1[Number(previewItem.value)].paint(board, x, y, { type: plane });
+    let info = currentPlayerInfo();
+    info.shape.paint(board, x, y, { type: plane });
 }
 
 function onRender(place: CustomEvent) {
@@ -58,7 +80,37 @@ function onRender(place: CustomEvent) {
     console.log("stone", stone);
     for (let i = 0; i < stone.rotate; i++)
         shapeArrP2[stone.stoneid].rotate();
-    shapeArrP2[stone.stoneid].paint(board, stone.x, stone.y, { c: WGo.W });
+
+    let shape: typeof shapeArrP1[0];
+    let color: typeof WGo.B;
+    if (player == 1) {
+        shape = shapeArrP1[stone.stoneid];
+        color = WGo.B;
+    } else {
+        shape = shapeArrP2[stone.stoneid];
+        color = WGo.W;
+    }
+    shape.paint(board, stone.x, stone.y, { c: color });
+    filp_player();
+}
+
+function onRevert(place: CustomEvent) {
+    console.log(prevState);
+    filp_player();
+    // remove plane in prev state
+    for (let i = 0; i < 13; i++) {
+        for (let j = 0; j < 13; j++) {
+            for (let k = 0; k < prevState.objects[i][j].length; k++) {
+                // if c (white, black) not found => plane,
+                // than reset the plane
+                if (prevState.objects[i][j][k].c == undefined) {
+                    prevState.objects[i][j].splice(k, 1);
+                }
+            }
+        }
+    }
+
+    board.restoreState(prevState);
 }
 
 function main() {
@@ -71,6 +123,13 @@ function main() {
     board.addEventListener("click", onClick);
     board.addEventListener("wheel", _.debounce(onWheel, 400));
     document.getElementById("board").addEventListener("render", onRender);
+    document.getElementById("board").addEventListener("revert", onRevert);
+    let option: any = JSON.parse(localStorage.getItem("player"));
+    if (option.left != "human" || option.right == "human") {
+        player = 2;
+    } else {
+        player = 1;
+    }
 }
 
 

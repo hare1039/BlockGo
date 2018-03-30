@@ -60,11 +60,19 @@ class backend {
                 break;
 
             case "end":
+                alert("Winner: " + dat.why);
                 break;
 
             case "status":
                 if (dat.status != "ok") {
                     console.log(dat);
+                    let event = new CustomEvent("revert", {
+                        detail: {
+                            err: dat.why,
+                            origin: dat.origin
+                        }
+                    });
+                    document.getElementById("board").dispatchEvent(event);
                     return;
                 }
                 break;
