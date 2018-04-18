@@ -59,12 +59,8 @@ class backend {
                 document.getElementById("board").dispatchEvent(event);
                 break;
 
-            case "end":
-                alert("Winner: " + dat.why);
-                break;
-
             case "status":
-                if (dat.status != "ok") {
+                if (dat.status == "err") {
                     console.log(dat);
                     let event = new CustomEvent("revert", {
                         detail: {
@@ -74,6 +70,10 @@ class backend {
                     });
                     document.getElementById("board").dispatchEvent(event);
                     return;
+                }
+                else if (dat.status == "end") {
+                    alert("Winner: " + dat.why);
+                    break;
                 }
                 break;
         }
