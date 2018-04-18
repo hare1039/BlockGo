@@ -1,5 +1,5 @@
 * DONE make a public folder to prevent file leak
+* TODO save board
 * TODO Read board 
 ** TODO return to $$ 步 
-** TODO 美術
-* TODO save board
+* TODO 美術
