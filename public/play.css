@@ -23,7 +23,7 @@ input[type=radio]:checked + label {
 	height:  calc((100vh / 9) - 30px);
 }
 
-input[type=radio]{
+input[type=radio] {
 	display: none;
 }
 
@@ -33,10 +33,16 @@ body {
 	flex-direction: row;
 }
 
-#container1 {
+#container-left {
 	display: flex;
 	flex: 1;
 	flex-direction: column;
+}
+
+#container-mid {
+    display: flex;
+    flex: 6;
+    flex-direction: column;
 }
 
 #board {
@@ -45,7 +51,7 @@ body {
 	cursor: none;
 }
 
-#container2 {
+#container-right {
 	display: flex;
 	flex: 1;
 	flex-direction: column;

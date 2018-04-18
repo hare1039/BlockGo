@@ -7,11 +7,12 @@
 	<script type="text/javascript" src="wgo/wgo.min.js"></script>
 	<script type="text/javascript" src="wgo/wgo.player.min.js"></script>
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="wgo/wgo.player.css" />
 	<link rel="stylesheet" type="text/css" href="./play.css" />
   </head>
   <body>
-	<div id="container1">
+	<div id="container-left">
 	  <div class="choice-block"><input type="radio" name="preview_1" value="1" id="preview_type1_1" checked/><label class="choice" for="preview_type1_1">type 1<img src="./asset/1.png" /></label> <br /></div>
 	  <div class="choice-block"><input type="radio" name="preview_1" value="2" id="preview_type2_1"/><label class="choice" for="preview_type2_1">type 2<img src="./asset/2.png" /></label><br /></div>
 	  <div class="choice-block"><input type="radio" name="preview_1" value="3" id="preview_type3_1"/><label class="choice" for="preview_type3_1">type 3<img src="./asset/3.png" /></label><br /></div>
@@ -22,10 +23,15 @@
 	  <div class="choice-block"><input type="radio" name="preview_1" value="8" id="preview_type8_1"/><label class="choice" for="preview_type8_1">type 8<img src="./asset/8.png" /></label><br /></div>
 	  <div class="choice-block"><input type="radio" name="preview_1" value="9" id="preview_type9_1"/><label class="choice" for="preview_type9_1">type 9<img src="./asset/9.png" /></label><br /></div>  
 	</div>
-    <div id="board">
-      <!-- board will go here -->
-    </div>
-	<div id="container2">
+	<div id="container-mid">
+      <div id="board">
+		<!-- board will go here -->
+      </div>
+	  <button id="saveButton">
+		Save
+	  </button>
+	</div>
+	<div id="container-right">
 	  <div class="choice-block"><input type="radio" name="preview_2" value="1" id="preview_type1_2" checked/><label class="choice" for="preview_type1_2">type 1<img src="./asset/1.png" /></label><br /></div>
 	  <div class="choice-block"><input type="radio" name="preview_2" value="2" id="preview_type2_2"/><label class="choice" for="preview_type2_2">type 2<img src="./asset/2.png" /></label><br /></div>
 	  <div class="choice-block"><input type="radio" name="preview_2" value="3" id="preview_type3_2"/><label class="choice" for="preview_type3_2">type 3<img src="./asset/3.png" /></label><br /></div>

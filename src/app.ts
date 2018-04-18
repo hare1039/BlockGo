@@ -5,12 +5,14 @@ declare var _: any;
 import { plane } from "./stones";
 import { shapeArrP1, shapeArrP2 } from "./shapes";
 import { backend, render_info } from "./websocket";
+import { game_records } from "record";
+
 
 let tool = document.getElementById("tool") as HTMLInputElement;
 let board: any;
 let back: any;
 let prevState: any;
-
+let record: game_records;
 
 let player: number;
 function filp_player() {
@@ -40,7 +42,7 @@ function onClick(x: number, y: number) {
     let info = currentPlayerInfo();
     prevState = board.getState();
     info.shape.paint(board, x, y, { c: info.color });
-    filp_player();
+
     back.send(JSON.stringify({
         cmd: "transfer",
         x: x,
@@ -48,6 +50,14 @@ function onClick(x: number, y: number) {
         stone: Number(info.dom.value),
         rotate: info.shape.dir
     }));
+    record.append({
+        player: player,
+        x: x,
+        y: y,
+        stone: Number(info.dom.value),
+        rotate: info.shape.dir
+    });
+    filp_player();
 }
 
 function onWheel(x: number, y: number, event: WheelEvent) {
@@ -91,12 +101,19 @@ function onRender(place: CustomEvent) {
         color = WGo.W;
     }
     shape.paint(board, stone.x, stone.y, { c: color });
+    record.append({
+        player: player,
+        x: stone.x,
+        y: stone.y,
+        stone: stone.stoneid,
+        rotate: stone.rotate
+    });
     filp_player();
 }
 
 function onRevert(place: CustomEvent) {
     console.log(prevState);
-    filp_player();
+
     // remove plane in prev state
     for (let i = 0; i < 13; i++) {
         for (let j = 0; j < 13; j++) {
@@ -109,7 +126,8 @@ function onRevert(place: CustomEvent) {
             }
         }
     }
-
+    record.pop();
+    filp_player();
     board.restoreState(prevState);
 }
 
@@ -118,7 +136,9 @@ function main() {
         width: 600,
         size: 13
     });
+    record = new game_records;
     back = new backend("wss://play.hare1039.nctu.me");
+
     board.addEventListener("mousemove", onMousemove);
     board.addEventListener("click", onClick);
     board.addEventListener("wheel", _.debounce(onWheel, 400));
@@ -130,7 +150,11 @@ function main() {
     } else {
         player = 1;
     }
-}
 
+    let button = document.getElementById("saveButton");
+    button.onclick = function() {
+        record.save();
+    };
+}
 
 main();
