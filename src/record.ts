@@ -27,8 +27,12 @@ class game_records {
         this.records.length = 0;
     }
 
-    load_from_json = (json: object) => {
+    load = (json: record[]) => {
+        this.records = json;
+    }
 
+    data = () => {
+        return this.records;
     }
 
     save = () => {

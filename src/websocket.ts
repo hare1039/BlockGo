@@ -7,12 +7,16 @@ interface render_info {
     rotate: number;
 }
 
+function sleep(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 class backend {
-    board_ref: any;
     websocket: WebSocket;
     constructor(wss: string) {
         this.websocket = new WebSocket(wss);
+        this.buffer = new Array<string>();
+        this.ready = false;
         this.websocket.onopen =
             (evt: Event) => { this.onOpen(evt); };
         this.websocket.onclose =
@@ -26,12 +30,22 @@ class backend {
 
     onOpen(evt: Event) {
         let option: any = JSON.parse(localStorage.getItem("player"));
+        this.ready = true;
         this.send(JSON.stringify({
             cmd: "start",
             right: option.right,
             left: option.left
         }));
+        this.sendBuffer();
         console.log(evt);
+    }
+
+    async sendBuffer() {
+        for (let msg of this.buffer) {
+            await sleep(80);
+            this.send(msg);
+        }
+        this.buffer.length = 0;
     }
 
     onClose(evt: CloseEvent) {
@@ -84,8 +98,14 @@ class backend {
         console.error(evt);
     }
 
-    send(message: string) {
-        this.websocket.send(message);
+    buffer: string[];
+    ready: boolean;
+    send = (message: string) => {
+        if (!this.ready) {
+            this.buffer.push(message);
+        } else {
+            this.websocket.send(message);
+        }
     }
 }
 

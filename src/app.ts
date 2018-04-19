@@ -131,6 +131,32 @@ function onRevert(place: CustomEvent) {
     board.restoreState(prevState);
 }
 
+function replay(game: game_records) {
+    for (let g of game.data()) {
+        let shape: typeof shapeArrP1[0];
+        let color: typeof WGo.B;
+        if (g.player == 1) {
+            shape = shapeArrP1[g.stone];
+            color = WGo.B;
+        } else {
+            shape = shapeArrP2[g.stone];
+            color = WGo.W;
+        }
+        for (let count = 0; count < g.rotate; count++) {
+            shape.rotate();
+        }
+        shape.paint(board, g.x, g.y, { c: color });
+
+        back.send(JSON.stringify({
+            cmd: "transfer",
+            x: g.x,
+            y: g.y,
+            stone: g.stone,
+            rotate: g.rotate
+        }));
+    }
+}
+
 function main() {
     board = new WGo.Board(document.getElementById("board"), {
         width: 600,
@@ -149,6 +175,12 @@ function main() {
         player = 2;
     } else {
         player = 1;
+    }
+
+    let gamefile = localStorage.getItem("gamefile");
+    if (gamefile) {
+        record.load(JSON.parse(gamefile));
+        replay(record);
     }
 
     let button = document.getElementById("saveButton");
