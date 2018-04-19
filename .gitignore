@@ -1,4 +1,2 @@
-*.js
-*.js.map
-
-!index.js
+app.js
+app.js.map
