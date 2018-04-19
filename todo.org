@@ -1,5 +1,6 @@
 * DONE make a public folder to prevent file leak
-* TODO save board
-* TODO Read board 
-** TODO return to $$ 步 
+* DONE save board
+* TODO Read board
+** DONE Read game basic step
+** TODO return to # of step
 * TODO 美術
