@@ -20,6 +20,12 @@ document.getElementById("load-game").addEventListener("change", function(e) {
 		localStorage.setItem("gamefile", res.target.result);
 		onClick();
 	}
+
+
+    
+    var num_input = document.getElementById("stepNumber");
+    //    num_input.setAttribute("max", "your max step number");
+    num_input.style.display = "inline-flex";
 });
 
 localStorage.clear();
