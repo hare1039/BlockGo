@@ -23,12 +23,20 @@ class game_records {
         this.records.pop();
     }
 
+    back = () => {
+        return this.records[this.records.length - 1];
+    }
+
     clear = () => {
         this.records.length = 0;
     }
 
-    load = (json: record[]) => {
-        this.records = json;
+    load = (json: record[], len?: number) => {
+        if (len) {
+            this.records = json.slice(0, len);
+        } else {
+            this.records = json;
+        }
     }
 
     data = () => {

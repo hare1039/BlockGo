@@ -84,8 +84,7 @@ class backend {
                     });
                     document.getElementById("board").dispatchEvent(event);
                     return;
-                }
-                else if (dat.status == "end") {
+                } else if (dat.status == "end") {
                     alert("Winner: " + dat.why);
                     break;
                 }

@@ -7,7 +7,12 @@ function onClick() {
 		right: r.value,
 		left: l.value
 	}));
-	
+
+	var jumpStep = document.getElementById("stepNumber");
+	if (jumpStep) {
+		localStorage.setItem("stepNumber", jumpStep.value);
+	}
+
 	window.location.href = "play.html";
 }
 
@@ -18,14 +23,12 @@ document.getElementById("load-game").addEventListener("change", function(e) {
 	reader.readAsText(gamefile);
 	reader.onloadend = function(res) {
 		localStorage.setItem("gamefile", res.target.result);
-		onClick();
+
+		var num_input = document.getElementById("stepNumber");
+		num_input.setAttribute("max", JSON.parse(res.target.result).length);
+		num_input.setAttribute("value", JSON.parse(res.target.result).length);
+		num_input.style.display = "inline-flex";
 	}
-
-
-    
-    var num_input = document.getElementById("stepNumber");
-    //    num_input.setAttribute("max", "your max step number");
-    num_input.style.display = "inline-flex";
 });
 
 localStorage.clear();

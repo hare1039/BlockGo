@@ -38,6 +38,45 @@ function currentPlayerInfo() {
     return info;
 }
 
+function replay(game: game_records) {
+    for (let g of game.data()) {
+        let shape: typeof shapeArrP1[0];
+        let color: typeof WGo.B;
+        if (g.player == 1) {
+            shape = shapeArrP1[g.stone];
+            color = WGo.B;
+        } else {
+            shape = shapeArrP2[g.stone];
+            color = WGo.W;
+        }
+        for (let count = 0; count < g.rotate; count++) {
+            shape.rotate();
+        }
+        shape.paint(board, g.x, g.y, { c: color });
+
+        back.send(JSON.stringify({
+            cmd: "transfer",
+            x: g.x,
+            y: g.y,
+            stone: g.stone,
+            rotate: g.rotate
+        }));
+    }
+}
+
+function stoneDisplay(who: number, stoneid: number, show: boolean) {
+    let dom = document.getElementById("preview_type" + stoneid.toString() + "_" + who.toString()).parentNode as HTMLElement;
+
+    if (show) {
+        dom.style.backgroundColor = "transparent";
+    } else {
+        dom.style.backgroundColor = "#6b6b6b";
+    }
+    console.log(dom);
+}
+
+// event handlers
+
 function onClick(x: number, y: number) {
     let info = currentPlayerInfo();
     prevState = board.getState();
@@ -57,6 +96,7 @@ function onClick(x: number, y: number) {
         stone: Number(info.dom.value),
         rotate: info.shape.dir
     });
+    stoneDisplay(player, Number(info.dom.value), false);
     filp_player();
 }
 
@@ -108,6 +148,7 @@ function onRender(place: CustomEvent) {
         stone: stone.stoneid,
         rotate: stone.rotate
     });
+    stoneDisplay(player, stone.stoneid, false);
     filp_player();
 }
 
@@ -126,35 +167,10 @@ function onRevert(place: CustomEvent) {
             }
         }
     }
+    stoneDisplay(record.back().player, record.back().stone, true);
     record.pop();
     filp_player();
     board.restoreState(prevState);
-}
-
-function replay(game: game_records) {
-    for (let g of game.data()) {
-        let shape: typeof shapeArrP1[0];
-        let color: typeof WGo.B;
-        if (g.player == 1) {
-            shape = shapeArrP1[g.stone];
-            color = WGo.B;
-        } else {
-            shape = shapeArrP2[g.stone];
-            color = WGo.W;
-        }
-        for (let count = 0; count < g.rotate; count++) {
-            shape.rotate();
-        }
-        shape.paint(board, g.x, g.y, { c: color });
-
-        back.send(JSON.stringify({
-            cmd: "transfer",
-            x: g.x,
-            y: g.y,
-            stone: g.stone,
-            rotate: g.rotate
-        }));
-    }
 }
 
 function main() {
@@ -163,8 +179,8 @@ function main() {
         size: 13
     });
     record = new game_records;
-    back = new backend("wss://play.hare1039.nctu.me");
-
+    //back = new backend("wss://play.hare1039.nctu.me");
+    back = new backend("ws://192.168.1.120:9002");
     board.addEventListener("mousemove", onMousemove);
     board.addEventListener("click", onClick);
     board.addEventListener("wheel", _.debounce(onWheel, 400));
@@ -179,7 +195,8 @@ function main() {
 
     let gamefile = localStorage.getItem("gamefile");
     if (gamefile) {
-        record.load(JSON.parse(gamefile));
+        let step = localStorage.getItem("stepNumber");
+        record.load(JSON.parse(gamefile), parseInt(step));
         replay(record);
     }
 
