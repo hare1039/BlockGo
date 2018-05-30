@@ -68,9 +68,9 @@ function stoneDisplay(who: number, stoneid: number, show: boolean) {
     let dom = document.getElementById("preview_type" + stoneid.toString() + "_" + who.toString()).parentNode as HTMLElement;
 
     if (show) {
-        dom.style.backgroundColor = "transparent";
+        dom.style.backgroundColor = "rgba(30, 50, 67, 0.62)";
     } else {
-        dom.style.backgroundColor = "#6b6b6b";
+        dom.style.backgroundColor = "#453e3e";
     }
     console.log(dom);
 }

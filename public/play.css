@@ -3,6 +3,7 @@ input[type=radio] + label {
 	display: inline-flex;
 	min-height: 25px;
 	padding-left: 35px;
+	color: white;
 }
 
 input[type=radio]:checked + label {
@@ -22,6 +23,12 @@ input[type=radio]:checked + label {
 	padding: 10px;
 	height:  calc((100vh / 9) - 30px);
 }
+
+.choice-block {
+	background-color: rgba(30, 50, 67, 0.62);
+	border-radius: 10px;
+}
+
 
 input[type=radio] {
 	display: none;
@@ -57,3 +64,15 @@ body {
 	flex-direction: column;
 }
 
+.bg {
+	width:100%;
+	height:100%;
+	position: absolute;
+	left: 0;
+	top: 0;
+	z-index: -1;
+	filter: blur(2px);
+	filter: brightness(0.8);
+	display: flex;
+	/*border: 2px solid blue;*/
+}
