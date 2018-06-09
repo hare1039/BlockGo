@@ -1,9 +1,9 @@
 * DONE make a public folder to prevent file leak
 * TODO save board
 ** TODO who win, by x:y
-* TODO Read board
+* DONE Read board
 ** DONE Read game basic step
-** TODO return to # of step
-* TODO 美術
-** TODO Remove stone selected
-** TODO change white stone picture
+** DONE return to # of step
+* DONE 美術
+** DONE Remove stone selected
+** DONE change white stone picture

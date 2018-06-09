@@ -14,6 +14,12 @@ let back: any;
 let prevState: any;
 let record: game_records;
 
+let player_type = new Map();
+player_type.set("human", 1);
+player_type.set("MCTS", 2);
+player_type.set("random", 3);
+player_type.set("strategy", 4);
+
 let player: number;
 function filp_player() {
     player = (player == 1) ? 2 : 1;
@@ -24,6 +30,7 @@ class playerInfo {
     color: typeof WGo.B;
     dom: HTMLInputElement;
 }
+
 function currentPlayerInfo() {
     let previewItem = document.querySelector('input[name = "preview_' + player + '"]:checked') as HTMLInputElement;
     let info = new playerInfo;
@@ -59,7 +66,11 @@ function replay(game: game_records) {
             x: g.x,
             y: g.y,
             stone: g.stone,
-            rotate: g.rotate
+            rotate: g.rotate,
+            player: {
+                current: player_type.get("human"),
+                next: player_type.get("human")
+            }
         }));
     }
 }
@@ -68,11 +79,10 @@ function stoneDisplay(who: number, stoneid: number, show: boolean) {
     let dom = document.getElementById("preview_type" + stoneid.toString() + "_" + who.toString()).parentNode as HTMLElement;
 
     if (show) {
-        dom.style.backgroundColor = "rgba(30, 50, 67, 0.62)";
+        dom.style.visibility = "visible";
     } else {
-        dom.style.backgroundColor = "#453e3e";
+        dom.style.visibility = "hidden";
     }
-    console.log(dom);
 }
 
 // event handlers
@@ -82,12 +92,19 @@ function onClick(x: number, y: number) {
     prevState = board.getState();
     info.shape.paint(board, x, y, { c: info.color });
 
+    let right = (document.getElementById("rightSelect") as HTMLInputElement).value;
+    let left = (document.getElementById("leftSelect") as HTMLInputElement).value;
+
     back.send(JSON.stringify({
         cmd: "transfer",
         x: x,
         y: y,
         stone: Number(info.dom.value),
-        rotate: info.shape.dir
+        rotate: info.shape.dir,
+        player: {
+            current: (player == 1) ? player_type.get(left) : player_type.get(right),
+            next: (player == 1) ? player_type.get(right) : player_type.get(left)
+        }
     }));
     record.append({
         player: player,
@@ -179,19 +196,23 @@ function main() {
         size: 13
     });
     record = new game_records;
-    //back = new backend("wss://play.hare1039.nctu.me");
-    back = new backend("ws://192.168.1.120:9002");
+    back = new backend("wss://play.hare1039.nctu.me/pi");
+    //back = new backend("ws://192.168.1.120:9002");
     board.addEventListener("mousemove", onMousemove);
     board.addEventListener("click", onClick);
     board.addEventListener("wheel", _.debounce(onWheel, 400));
     document.getElementById("board").addEventListener("render", onRender);
     document.getElementById("board").addEventListener("revert", onRevert);
+
     let option: any = JSON.parse(localStorage.getItem("player"));
-    if (option.left != "human" || option.right == "human") {
+    if (option.left != "human") {
         player = 2;
     } else {
         player = 1;
     }
+    (document.getElementById("rightSelect") as HTMLInputElement).value = option.right;
+    (document.getElementById("leftSelect") as HTMLInputElement).value = option.left;
+
 
     let gamefile = localStorage.getItem("gamefile");
     if (gamefile) {
