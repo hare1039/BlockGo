@@ -48,6 +48,11 @@ class backend {
         this.buffer.length = 0;
     }
 
+    async notice(str: string) {
+        await sleep(30);
+        alert(str);
+    }
+
     onClose(evt: CloseEvent) {
         console.log(evt);
     }
@@ -85,7 +90,8 @@ class backend {
                     document.getElementById("board").dispatchEvent(event);
                     return;
                 } else if (dat.status == "end") {
-                    alert("Winner: " + dat.why);
+                    let stat = JSON.parse(dat.why);
+                    this.notice("Winner: Player " + stat.winner.player + ", result: " + stat.winner.result.p1 + ":" + stat.winner.result.p2);
                     break;
                 }
                 break;
