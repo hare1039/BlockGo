@@ -120,14 +120,14 @@ body {
 	display: inline-flex;
 	border-radius: 5px;
 }
-#loli {
-	background-image: url("https://hare1039.nctu.me/imgs/blockgo-asset/ai.jpg");
+#old {
+	background-image: url("./asset/index/ai.jpg");
 	background-position: center center;
 
     background-size: 700px 400px;
 }
-#old {
-	background-image: url("https://hare1039.nctu.me/imgs/blockgo-asset/tubaki.jpg");
+#loli {
+	background-image: url("./asset/index/tubaki.jpg");
 	background-position: left top;
 
     background-size: 700px 350px;

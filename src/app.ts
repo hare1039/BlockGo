@@ -64,7 +64,7 @@ function replay(game: game_records) {
             shape.rotate();
         }
         shape.paint(board, g.x, g.y, { c: color });
-
+        stoneDisplay(g.player, g.stone, false);
         back.send(JSON.stringify({
             cmd: "transfer",
             x: g.x,
@@ -118,17 +118,20 @@ function onClick(x: number, y: number) {
         rotate: info.shape.dir
     });
 
-
+    let displayLoading = false;
     if (opponent(player) == 2 /* right side */ && right != "human") {
         alertify.logPosition("bottom right");
+        displayLoading = true;
     } else if (opponent(player) == 1 /* left side */ && left != "human") {
         alertify.logPosition("bottom left");
+        displayLoading = true;
     }
 
-
-    alertify.maxLogItems(1).delay(0).log(
-        "<img width='300px' src='" + randomLoadingImg() + "'>" +
-        "<p>Thinking... Thinking...</p>");
+    if (displayLoading) {
+        alertify.maxLogItems(1).delay(0).log(
+            "<img width='300px' src='" + randomLoadingImg() + "'>" +
+            "<p>Thinking... Thinking...</p>");
+    }
 
     stoneDisplay(player, Number(info.dom.value), false);
     filp_player();
