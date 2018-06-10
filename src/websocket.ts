@@ -1,3 +1,5 @@
+declare var alertify: any;
+
 
 interface render_info {
     x: number;
@@ -50,7 +52,7 @@ class backend {
 
     async notice(str: string) {
         await sleep(30);
-        alert(str);
+        alertify.alert(str);
     }
 
     onClose(evt: CloseEvent) {
@@ -80,7 +82,6 @@ class backend {
 
             case "status":
                 if (dat.status == "err") {
-                    console.log(dat);
                     let event = new CustomEvent("revert", {
                         detail: {
                             err: dat.why,

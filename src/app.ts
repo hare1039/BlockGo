@@ -1,12 +1,12 @@
 declare var WGo: any;
 declare var _: any;
-
+declare var alertify: any;
 
 import { plane } from "./stones";
 import { shapeArrP1, shapeArrP2 } from "./shapes";
 import { backend, render_info } from "./websocket";
-import { game_records } from "record";
-
+import { game_records } from "./record";
+import { randomLoadingImg } from "./loading";
 
 let tool = document.getElementById("tool") as HTMLInputElement;
 let board: any;
@@ -23,6 +23,10 @@ player_type.set("strategy", 4);
 let player: number;
 function filp_player() {
     player = (player == 1) ? 2 : 1;
+}
+
+function opponent(p: number) {
+    return (p == 1) ? 2 : 1;
 }
 
 class playerInfo {
@@ -113,6 +117,19 @@ function onClick(x: number, y: number) {
         stone: Number(info.dom.value),
         rotate: info.shape.dir
     });
+
+
+    if (opponent(player) == 2 /* right side */ && right != "human") {
+        alertify.logPosition("bottom right");
+    } else if (opponent(player) == 1 /* left side */ && left != "human") {
+        alertify.logPosition("bottom left");
+    }
+
+
+    alertify.maxLogItems(1).delay(0).log(
+        "<img width='300px' src='" + randomLoadingImg() + "'>" +
+        "<p>Thinking... Thinking...</p>");
+
     stoneDisplay(player, Number(info.dom.value), false);
     filp_player();
 }
@@ -143,6 +160,7 @@ function onMousemove(x: number, y: number, event: MouseEvent) {
 }
 
 function onRender(place: CustomEvent) {
+    alertify.clearLogs();
     let stone = place.detail as render_info;
     console.log("stone", stone);
     for (let i = 0; i < stone.rotate; i++)
@@ -170,8 +188,14 @@ function onRender(place: CustomEvent) {
 }
 
 function onRevert(place: CustomEvent) {
+    alertify.clearLogs();
+    alertify.reset();
     console.log(prevState);
-
+    if (record.back().player == 1)
+        alertify.logPosition("bottom left");
+    else
+        alertify.logPosition("bottom right");
+    alertify.error("No, no... You cannot place that block there");
     // remove plane in prev state
     for (let i = 0; i < 13; i++) {
         for (let j = 0; j < 13; j++) {
@@ -196,7 +220,7 @@ function main() {
         size: 13
     });
     record = new game_records;
-    back = new backend("wss://play.hare1039.nctu.me/pi");
+    back = new backend("wss://play.hare1039.nctu.me/docker");
     //back = new backend("ws://192.168.1.120:9002");
     board.addEventListener("mousemove", onMousemove);
     board.addEventListener("click", onClick);
