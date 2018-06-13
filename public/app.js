@@ -389,7 +389,8 @@ define("loading", ["require", "exports"], function (require, exports) {
     let thinkingImgList = [
         "./asset/loading/normal.gif",
         "./asset/loading/long.gif",
-        "./asset/loading/sabaki.gif"
+        "./asset/loading/sabaki.gif",
+        "./asset/loading/wakaru.gif"
     ];
     function getRndInteger(min, max) {
         return Math.floor(Math.random() * (max - min)) + min;
