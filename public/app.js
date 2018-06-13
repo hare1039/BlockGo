@@ -595,7 +595,7 @@ define("app", ["require", "exports", "stones", "shapes", "websocket", "record", 
             size: 13
         });
         record = new record_1.game_records;
-        back = new websocket_1.backend("wss://play.hare1039.nctu.me/docker");
+        back = new websocket_1.backend("wss://play.hare1039.nctu.me/pi");
         board.addEventListener("mousemove", onMousemove);
         board.addEventListener("click", onClick);
         board.addEventListener("wheel", _.debounce(onWheel, 400));

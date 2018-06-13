@@ -223,8 +223,7 @@ function main() {
         size: 13
     });
     record = new game_records;
-    back = new backend("wss://play.hare1039.nctu.me/docker");
-    //back = new backend("ws://192.168.1.120:9002");
+    back = new backend("wss://play.hare1039.nctu.me/pi");
     board.addEventListener("mousemove", onMousemove);
     board.addEventListener("click", onClick);
     board.addEventListener("wheel", _.debounce(onWheel, 400));
