@@ -1,7 +1,9 @@
 declare var alertify: any;
 
+import { playerType } from "./constants";
 
-interface render_info {
+
+interface renderInfo {
     x: number;
     y: number;
     who: number;
@@ -35,8 +37,8 @@ class backend {
         this.ready = true;
         this.send(JSON.stringify({
             cmd: "start",
-            right: option.right,
-            left: option.left
+            right: playerType.get(option.right),
+            left: playerType.get(option.left)
         }));
         this.sendBuffer();
         console.log(evt);
@@ -52,6 +54,7 @@ class backend {
 
     async notice(str: string) {
         await sleep(30);
+        alertify.clearLogs();
         alertify.alert(str);
     }
 
@@ -71,7 +74,6 @@ class backend {
                     detail: {
                         x: dat.x,
                         y: dat.y,
-                        who: 2,
                         stoneid: dat.stone,
                         rotate: dat.rotate
                     }
@@ -82,13 +84,17 @@ class backend {
 
             case "status":
                 if (dat.status == "err") {
-                    let event = new CustomEvent("revert", {
-                        detail: {
-                            err: dat.why,
-                            origin: dat.origin
-                        }
-                    });
-                    document.getElementById("board").dispatchEvent(event);
+                    if (dat.why == "Game process terminated.") {
+                        alertify.alert("Game process terminated.");
+                    } else {
+                        let event = new CustomEvent("revert", {
+                            detail: {
+                                err: dat.why,
+                                origin: dat.origin
+                            }
+                        });
+                        document.getElementById("board").dispatchEvent(event);
+                    }
                     return;
                 } else if (dat.status == "end") {
                     let stat = JSON.parse(dat.why);
@@ -115,4 +121,4 @@ class backend {
     }
 }
 
-export { backend, render_info };
+export { backend, renderInfo };

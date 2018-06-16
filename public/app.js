@@ -238,7 +238,18 @@ define("shapes", ["require", "exports"], function (require, exports) {
     ];
     exports.shapeArrP2 = shapeArrP2;
 });
-define("websocket", ["require", "exports"], function (require, exports) {
+define("constants", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    let playerType = new Map();
+    exports.playerType = playerType;
+    playerType.set("none", 0);
+    playerType.set("human", 1);
+    playerType.set("MCTS", 2);
+    playerType.set("random", 3);
+    playerType.set("strategy", 4);
+});
+define("websocket", ["require", "exports", "constants"], function (require, exports, constants_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     function sleep(ms) {
@@ -271,8 +282,8 @@ define("websocket", ["require", "exports"], function (require, exports) {
             this.ready = true;
             this.send(JSON.stringify({
                 cmd: "start",
-                right: option.right,
-                left: option.left
+                right: constants_1.playerType.get(option.right),
+                left: constants_1.playerType.get(option.left)
             }));
             this.sendBuffer();
             console.log(evt);
@@ -289,6 +300,7 @@ define("websocket", ["require", "exports"], function (require, exports) {
         notice(str) {
             return __awaiter(this, void 0, void 0, function* () {
                 yield sleep(30);
+                alertify.clearLogs();
                 alertify.alert(str);
             });
         }
@@ -306,7 +318,6 @@ define("websocket", ["require", "exports"], function (require, exports) {
                         detail: {
                             x: dat.x,
                             y: dat.y,
-                            who: 2,
                             stoneid: dat.stone,
                             rotate: dat.rotate
                         }
@@ -315,13 +326,18 @@ define("websocket", ["require", "exports"], function (require, exports) {
                     break;
                 case "status":
                     if (dat.status == "err") {
-                        let event = new CustomEvent("revert", {
-                            detail: {
-                                err: dat.why,
-                                origin: dat.origin
-                            }
-                        });
-                        document.getElementById("board").dispatchEvent(event);
+                        if (dat.why == "Game process terminated.") {
+                            alertify.alert("Game process terminated.");
+                        }
+                        else {
+                            let event = new CustomEvent("revert", {
+                                detail: {
+                                    err: dat.why,
+                                    origin: dat.origin
+                                }
+                            });
+                            document.getElementById("board").dispatchEvent(event);
+                        }
                         return;
                     }
                     else if (dat.status == "end") {
@@ -400,7 +416,7 @@ define("loading", ["require", "exports"], function (require, exports) {
     }
     exports.randomLoadingImg = randomLoadingImg;
 });
-define("app", ["require", "exports", "stones", "shapes", "websocket", "record", "loading"], function (require, exports, stones_1, shapes_1, websocket_1, record_1, loading_1) {
+define("app", ["require", "exports", "stones", "shapes", "websocket", "record", "loading", "constants"], function (require, exports, stones_1, shapes_1, websocket_1, record_1, loading_1, constants_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     let tool = document.getElementById("tool");
@@ -408,13 +424,8 @@ define("app", ["require", "exports", "stones", "shapes", "websocket", "record", 
     let back;
     let prevState;
     let record;
-    let player_type = new Map();
-    player_type.set("human", 1);
-    player_type.set("MCTS", 2);
-    player_type.set("random", 3);
-    player_type.set("strategy", 4);
     let player;
-    function filp_player() {
+    function filpPlayer() {
         player = (player == 1) ? 2 : 1;
     }
     function opponent(p) {
@@ -460,8 +471,8 @@ define("app", ["require", "exports", "stones", "shapes", "websocket", "record", 
                 stone: g.stone,
                 rotate: g.rotate,
                 player: {
-                    current: player_type.get("human"),
-                    next: player_type.get("human")
+                    current: constants_2.playerType.get("human"),
+                    next: constants_2.playerType.get("human")
                 }
             }));
         }
@@ -488,8 +499,9 @@ define("app", ["require", "exports", "stones", "shapes", "websocket", "record", 
             stone: Number(info.dom.value),
             rotate: info.shape.dir,
             player: {
-                current: (player == 1) ? player_type.get(left) : player_type.get(right),
-                next: (player == 1) ? player_type.get(right) : player_type.get(left)
+                current: constants_2.playerType.get("human"),
+                next: (left == "human") ? constants_2.playerType.get(right) :
+                    (right == "human") ? constants_2.playerType.get(left) : constants_2.playerType.get("none")
             }
         }));
         record.append({
@@ -513,7 +525,7 @@ define("app", ["require", "exports", "stones", "shapes", "websocket", "record", 
                 "<p>Thinking... Thinking...</p>");
         }
         stoneDisplay(player, Number(info.dom.value), false);
-        filp_player();
+        filpPlayer();
     }
     function onWheel(x, y, event) {
         let previewItem = document.querySelector('input[name = "preview_' + player + '"]:checked');
@@ -544,7 +556,12 @@ define("app", ["require", "exports", "stones", "shapes", "websocket", "record", 
         let stone = place.detail;
         console.log("stone", stone);
         for (let i = 0; i < stone.rotate; i++)
-            shapes_1.shapeArrP2[stone.stoneid].rotate();
+            if (player == 1) {
+                shapes_1.shapeArrP1[stone.stoneid].rotate();
+            }
+            else {
+                shapes_1.shapeArrP2[stone.stoneid].rotate();
+            }
         let shape;
         let color;
         if (player == 1) {
@@ -564,7 +581,7 @@ define("app", ["require", "exports", "stones", "shapes", "websocket", "record", 
             rotate: stone.rotate
         });
         stoneDisplay(player, stone.stoneid, false);
-        filp_player();
+        filpPlayer();
     }
     function onRevert(place) {
         alertify.clearLogs();
@@ -586,7 +603,7 @@ define("app", ["require", "exports", "stones", "shapes", "websocket", "record", 
         }
         stoneDisplay(record.back().player, record.back().stone, true);
         record.pop();
-        filp_player();
+        filpPlayer();
         board.restoreState(prevState);
     }
     function main() {
@@ -602,12 +619,7 @@ define("app", ["require", "exports", "stones", "shapes", "websocket", "record", 
         document.getElementById("board").addEventListener("render", onRender);
         document.getElementById("board").addEventListener("revert", onRevert);
         let option = JSON.parse(localStorage.getItem("player"));
-        if (option.left != "human") {
-            player = 2;
-        }
-        else {
-            player = 1;
-        }
+        player = 1;
         document.getElementById("rightSelect").value = option.right;
         document.getElementById("leftSelect").value = option.left;
         let gamefile = localStorage.getItem("gamefile");

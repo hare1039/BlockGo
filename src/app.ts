@@ -4,9 +4,10 @@ declare var alertify: any;
 
 import { plane } from "./stones";
 import { shapeArrP1, shapeArrP2 } from "./shapes";
-import { backend, render_info } from "./websocket";
+import { backend, renderInfo } from "./websocket";
 import { game_records } from "./record";
 import { randomLoadingImg } from "./loading";
+import { playerType } from "./constants";
 
 let tool = document.getElementById("tool") as HTMLInputElement;
 let board: any;
@@ -14,14 +15,8 @@ let back: any;
 let prevState: any;
 let record: game_records;
 
-let player_type = new Map();
-player_type.set("human", 1);
-player_type.set("MCTS", 2);
-player_type.set("random", 3);
-player_type.set("strategy", 4);
-
 let player: number;
-function filp_player() {
+function filpPlayer() {
     player = (player == 1) ? 2 : 1;
 }
 
@@ -72,8 +67,8 @@ function replay(game: game_records) {
             stone: g.stone,
             rotate: g.rotate,
             player: {
-                current: player_type.get("human"),
-                next: player_type.get("human")
+                current: playerType.get("human"),
+                next: playerType.get("human")
             }
         }));
     }
@@ -106,8 +101,9 @@ function onClick(x: number, y: number) {
         stone: Number(info.dom.value),
         rotate: info.shape.dir,
         player: {
-            current: (player == 1) ? player_type.get(left) : player_type.get(right),
-            next: (player == 1) ? player_type.get(right) : player_type.get(left)
+            current: playerType.get("human"),
+            next: (left == "human") ? playerType.get(right) :
+                (right == "human") ? playerType.get(left) : playerType.get("none")
         }
     }));
     record.append({
@@ -134,7 +130,7 @@ function onClick(x: number, y: number) {
     }
 
     stoneDisplay(player, Number(info.dom.value), false);
-    filp_player();
+    filpPlayer();
 }
 
 function onWheel(x: number, y: number, event: WheelEvent) {
@@ -164,10 +160,15 @@ function onMousemove(x: number, y: number, event: MouseEvent) {
 
 function onRender(place: CustomEvent) {
     alertify.clearLogs();
-    let stone = place.detail as render_info;
+    let stone = place.detail as renderInfo;
     console.log("stone", stone);
     for (let i = 0; i < stone.rotate; i++)
-        shapeArrP2[stone.stoneid].rotate();
+        if (player == 1) {
+            shapeArrP1[stone.stoneid].rotate();
+        } else {
+            shapeArrP2[stone.stoneid].rotate();
+        }
+
 
     let shape: typeof shapeArrP1[0];
     let color: typeof WGo.B;
@@ -187,7 +188,7 @@ function onRender(place: CustomEvent) {
         rotate: stone.rotate
     });
     stoneDisplay(player, stone.stoneid, false);
-    filp_player();
+    filpPlayer();
 }
 
 function onRevert(place: CustomEvent) {
@@ -213,7 +214,7 @@ function onRevert(place: CustomEvent) {
     }
     stoneDisplay(record.back().player, record.back().stone, true);
     record.pop();
-    filp_player();
+    filpPlayer();
     board.restoreState(prevState);
 }
 
@@ -231,11 +232,7 @@ function main() {
     document.getElementById("board").addEventListener("revert", onRevert);
 
     let option: any = JSON.parse(localStorage.getItem("player"));
-    if (option.left != "human") {
-        player = 2;
-    } else {
-        player = 1;
-    }
+    player = 1;
     (document.getElementById("rightSelect") as HTMLInputElement).value = option.right;
     (document.getElementById("leftSelect") as HTMLInputElement).value = option.left;
 
